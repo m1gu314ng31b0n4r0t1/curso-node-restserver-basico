@@ -1,11 +1,15 @@
 const express = require('express');
 var cors = require('cors');
+const { dbConnection } = require('../database/config');
 
 class Server{
 
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
+
+        //Conectar a BD
+        this.conectarBD();
 
         //Para adminstrar la ruta de nuestro servicio
         this.usuariosPath = '/api/usuarios';
@@ -90,6 +94,14 @@ class Server{
 
         //CORS Para seguridad, provee seguridad de quien llama a nuestro rest server desde un portal
         this.app.use(cors())
+    }
+
+    //El await siempre debe estar en una funcion asincrona
+    async conectarBD(){
+
+        //Aqui podriamos teenr varias conecciones a la base de datos
+        //Se llama a la coneciion de la base de datos que creamos en ../database/config/dbConnection
+        await dbConnection();
     }
 }
 
