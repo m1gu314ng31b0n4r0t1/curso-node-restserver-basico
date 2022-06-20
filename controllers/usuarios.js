@@ -173,8 +173,19 @@ const usuariosPost = async  (req, res)  =>{
 
 // DELETE 
 const usuariosDelete = async (req, res)  =>{
+
+    //Obtenemos el idenmtifcador que viene de la req uid que agregamos al validar el token del usuario 
+
+    const uid = req.uid;
+
+    //Recuperamos el usuario auntenticado
+    const usaurioAutenticado = req.usuario;
+
     //Capturametros enviados desde la url del servicio ya que express los parsea y te los porporciona en los params
     const { id } = req.params;
+
+    //Usuario Auntenticado
+
 
     //Para borrar el usuario fisicamente de la coleccion NO recomendable
     //const usuario = await  Usuario.findByIdAndDelete( id );
@@ -184,7 +195,8 @@ const usuariosDelete = async (req, res)  =>{
 
 
     //Para manejo de errores HTTP con la funcion status(200) + el codigo de http
-    res.status(200).json(usuario);
+   // res.status(200).json({usuario, usaurioAutenticado});
+    res.status(200).json({usuario});
   }
 
 // PATCH 

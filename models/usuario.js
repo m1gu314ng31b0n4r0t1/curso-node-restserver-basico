@@ -47,7 +47,9 @@ const UsuarioShecma = Schema({
 
 //Para quitar los parametros que no queremos mostrar sobre escbrimos el metodo toJSON y quitamos mediante desestructuracioon __v, password
 UsuarioShecma.methods.toJSON = function(){
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+
+    usuario.uid = _id;
 
     return usuario;
 };

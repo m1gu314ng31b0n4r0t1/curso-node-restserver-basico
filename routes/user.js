@@ -5,7 +5,19 @@ const { usuariosGet, usuariosPost, usuariosDelete, usuariosPatch, usuariosPut } 
 
 // Se importa de los helpers
 const { esRolValido, existeEmail, existeUsuarioPorId } = require('../helpers/db-validators');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+//Middlewares
+//const { validarCampos } = require('../middlewares/validar-campos');
+//const { validarJWT } = require('../middlewares/validar-jwt');
+//const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+
+//Para importar todos los middlewares de una forma mas ordenanda se agrega un index con todos los middlewares de la aplicacion
+const {
+    validarCampos, 
+    validarJWT, 
+    esAdminRole, 
+    tieneRole  
+} = require('../middlewares/index');
 
 const Role = require('../models/rol');
 
@@ -14,13 +26,17 @@ const router = Router();
 
 
  // GET  Para el router solo se pasa el nombre de la funcion y el request y response es pasado autoamiticamente por el api
- router.get('/', usuariosGet );
+ router.get('/', 
+    [validarJWT],
+    usuariosGet );
 
 
 
  //Para definir los middlewares que van a validar el request de la petcion se pone en la segundo argumento con el combre del middleware si van a mandar mas 
  //de 1 se manda un arreglo con todos los middlewares
  router.post('/', [
+
+    
     //Check de 'express-validator' para validar correo, nombre, rol, password y revisar si es un mail valido
     check('correo', 'El correo no es valido').isEmail(),
 
@@ -53,6 +69,11 @@ const router = Router();
  ] , usuariosPost );
 
  router.delete('/:id',[
+    //El primer middleware en ejecutarse debe se el JWT
+     validarJWT,
+     //Para verficar el rol del usaurio
+     //esAdminRole,
+     tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
      check('id', 'No es un id valido').isMongoId(),
      check('id').custom( existeUsuarioPorId ),
      validarCampos

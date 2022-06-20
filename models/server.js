@@ -14,6 +14,9 @@ class Server{
         //Para adminstrar la ruta de nuestro servicio
         this.usuariosPath = '/api/usuarios';
 
+        //Ruta para servicio de autendticacion
+        this.authPath = '/api/auth';
+
         //Middlewares
         this.middlewares();
 
@@ -28,6 +31,8 @@ class Server{
         //creaUsario entonces quedaria /api/usuarios/creaUsario
         //this.app.use('/api/usuarios', require('../routes/user'));
         this.app.use(this.usuariosPath, require('../routes/user'));
+
+        this.app.use(this.authPath, require('../routes/auth'));
 
         /*
         //OJO accedemos al app con el this para peticion GET 
